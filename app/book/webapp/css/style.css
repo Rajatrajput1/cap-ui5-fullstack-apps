@@ -1,0 +1,17 @@
+.cardItem {
+    padding: 16px;
+    border-radius: 10px;
+    margin: 10px 0;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.cardTitle {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.cardAuthor {
+    color: #666;
+    margin-bottom: 10px;
+}

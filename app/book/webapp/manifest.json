@@ -1,7 +1,7 @@
 {
   "_version": "1.83.0",
   "sap.app": {
-    "id": "student",
+    "id": "book",
     "type": "application",
     "i18n": "i18n/i18n.properties",
     "applicationVersion": {
@@ -13,7 +13,7 @@
     "sourceTemplate": {
       "id": "@sap/generator-fiori:basic",
       "version": "1.22.0",
-      "toolsId": "8ab4646e-10f8-436f-a26a-564b6846ed3d"
+      "toolsId": "2b239265-ea3e-4100-b641-5e7579f118ec"
     },
     "dataSources": {
       "mainService": {
@@ -27,11 +27,11 @@
     },
     "crossNavigation": {
       "inbounds": {
-        "student-display": {
-          "semanticObject": "student",
+        "book-display": {
+          "semanticObject": "book",
           "action": "display",
-          "title": "{{student-display.flpTitle}}",
-          "subTitle": "{{student-display.flpSubtitle}}",
+          "title": "{{book-display.flpTitle}}",
+          "subTitle": "{{book-display.flpSubtitle}}",
           "signature": {
             "parameters": {},
             "additionalParameters": "allowed"
@@ -62,8 +62,7 @@
       "minUI5Version": "1.147.0",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {},
-        "sap.viz": {}
+        "sap.ui.core": {}
       }
     },
     "contentDensities": {
@@ -74,7 +73,7 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "student.i18n.i18n"
+          "bundleName": "book.i18n.i18n"
         }
       },
       "": {
@@ -102,9 +101,9 @@
         "transition": "slide",
         "type": "View",
         "viewType": "XML",
-        "path": "student.view",
+        "path": "book.view",
         "async": true,
-        "viewPath": "student.view"
+        "viewPath": "book.view"
       },
       "routes": [
         {
@@ -123,7 +122,7 @@
       }
     },
     "rootView": {
-      "viewName": "student.view.App",
+      "viewName": "book.view.App",
       "type": "XML",
       "id": "App",
       "async": true

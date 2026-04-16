@@ -1,5 +1,5 @@
 {
-  "name": "student",
+  "name": "book",
   "version": "0.0.1",
   "description": "An SAP Fiori application.",
   "keywords": [
@@ -14,11 +14,11 @@
     "@sap/ux-ui5-tooling": "1",
     "@sap-ux/eslint-plugin-fiori-tools": "^9.0.0",
     "eslint": "^9",
-    "ui5-task-zipper": "^3"
+    "ui5-task-zipper": "^3.4.x"
   },
   "scripts": {
     "deploy-config": "npx -p @sap/ux-ui5-tooling fiori add deploy-config cf",
-    "build": "ui5 build preload --clean-dest",
-    "start": "ui5 serve"
+    "build:cf": "ui5 build preload --clean-dest --config ui5-deploy.yaml --include-task=generateCachebusterInfo",
+    "build": "npm run build:cf"
   }
 }

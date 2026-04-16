@@ -1,0 +1,190 @@
+_schema-version: 3.3.0
+ID: cap_master
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: cap_master-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: cap_master-auth
+  - name: cap_master-db
+  - name: cap_master-destination
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+    instances: 1
+  build-parameters:
+    builder: npm-ci
+- name: cap_master-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: cap_master-db
+  parameters:
+    buildpack: nodejs_buildpack
+- name: cap_master-app-deployer
+  type: com.sap.application.content
+  path: gen
+  requires:
+  - name: cap_master-auth
+  - name: srv-api
+  - name: cap_master-html5-repo-host
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+      content-target: true
+  build-parameters:
+    build-result: app/
+    requires:
+    - artifacts:
+      - student.zip
+      name: cap_masterstudent
+      target-path: app/
+    - artifacts:
+      - book.zip
+      name: book
+      target-path: app/
+- name: cap_masterstudent
+  type: html5
+  path: app/student
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: cap_master-destinations
+  type: com.sap.application.content
+  requires:
+  - name: cap_master-auth
+    parameters:
+      service-key:
+        name: cap_master-auth-key
+  - name: cap_master-html5-repo-host
+    parameters:
+      service-key:
+        name: cap_master-html5-repo-host-key
+  - name: srv-api
+  - name: cap_master-destination
+    parameters:
+      content-target: true
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: cap_master-html5-repository
+          ServiceInstanceName: cap_master-html5-repo-host
+          ServiceKeyName: cap_master-html5-repo-host-key
+          sap.cloud.service: cap_master.service
+        - Authentication: OAuth2UserTokenExchange
+          Name: cap_master-auth
+          ServiceInstanceName: cap_master-auth
+          ServiceKeyName: cap_master-auth-key
+          sap.cloud.service: cap_master.service
+        existing_destinations_policy: update
+  build-parameters:
+    no-source: true
+- name: cap_master
+  type: approuter.nodejs
+  path: app/router
+  requires:
+  - name: srv-api
+    group: destinations
+    properties:
+      forwardAuthToken: true
+      name: srv-api
+      url: ~{srv-url}
+  - name: cap_master-auth
+  - name: cap_master-destination
+  - name: cap_master-html5-runtime
+  provides:
+  - name: app-api
+    properties:
+      app-protocol: ${protocol}
+      app-uri: ${default-uri}
+  parameters:
+    disk-quota: 256M
+    keep-existing-routes: true
+    memory: 256M
+- name: book
+  type: html5
+  path: app/book
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: cap_master-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      oauth2-configuration:
+        credential-types:
+        - binding-secret
+        - x509
+        redirect-uris:
+        - https://*~{app-api/app-uri}/**
+      tenant-mode: dedicated
+      xsappname: cap_master-${org}-${space}
+    path: ./xs-security.json
+    service: xsuaa
+    service-plan: application
+  requires:
+  - name: app-api
+- name: cap_master-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+- name: cap_master-destination
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
+            Name: srv-api
+            ProxyType: Internet
+            Type: HTTP
+            URL: ~{srv-api/srv-url}
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+    service: destination
+    service-plan: lite
+  requires:
+  - name: srv-api
+- name: cap_master-html5-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-host
+- name: cap_master-html5-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm ci
+    - npx cds build --production
