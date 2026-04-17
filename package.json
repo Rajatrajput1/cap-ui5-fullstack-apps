@@ -19,7 +19,8 @@
     "watch-book": "cds watch --open book/index.html?sap-ui-xx-viewCache=false --livereload false",
     "undeploy": "cf undeploy cap_master --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
-    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-order": "cds watch --open order/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "private": true,
   "cds": {

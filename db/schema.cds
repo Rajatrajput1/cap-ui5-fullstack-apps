@@ -15,9 +15,10 @@ entity Books {
 }
 
 entity Orders {
-  key ID : Integer;
-  product : String;
-  amount : Integer;
+  key ID : UUID;
+  customer : String;
+  amount : Decimal(10,2);
+  status   : String;
 }
 
 entity Employees {

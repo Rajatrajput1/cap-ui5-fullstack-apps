@@ -48,6 +48,10 @@ modules:
       - book.zip
       name: book
       target-path: app/
+    - artifacts:
+      - order.zip
+      name: order
+      target-path: app/
 - name: cap_masterstudent
   type: html5
   path: app/student
@@ -114,6 +118,16 @@ modules:
 - name: book
   type: html5
   path: app/book
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: order
+  type: html5
+  path: app/order
   build-parameters:
     build-result: dist
     builder: custom
