@@ -52,6 +52,10 @@ modules:
       - order.zip
       name: order
       target-path: app/
+    - artifacts:
+      - employee.zip
+      name: employee
+      target-path: app/
 - name: cap_masterstudent
   type: html5
   path: app/student
@@ -128,6 +132,16 @@ modules:
 - name: order
   type: html5
   path: app/order
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: employee
+  type: html5
+  path: app/employee
   build-parameters:
     build-result: dist
     builder: custom

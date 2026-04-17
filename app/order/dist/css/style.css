@@ -1,0 +1,24 @@
+.kpiBox {
+    padding: 18px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    width: 30%;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.kpiBox:hover {
+    transform: translateY(-5px);
+}
+
+.kpiValue {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* Variants */
+.highlight { border-left: 5px solid #007aff; }
+.revenue { border-left: 5px solid #ff9500; }
+.success { border-left: 5px solid #34c759; }

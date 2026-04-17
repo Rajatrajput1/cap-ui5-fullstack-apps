@@ -1,0 +1,126 @@
+<mvc:View controllerName="employee.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:micro="sap.suite.ui.microchart">
+
+    <Page id="page" title="{i18n>title}">
+        <content>
+
+            <!-- Header Toolbar -->
+            <Toolbar>
+                <Title text="Employee Management" level="H2"/>
+                <ToolbarSpacer/>
+                <Button text="Add Employee" press="onOpenDialog" type="Emphasized"/>
+            </Toolbar>
+
+            <!-- Message Strip -->
+            <MessageStrip 
+                text="Manage employee records efficiently"
+                type="Information"
+                showIcon="true"
+                showCloseButton="true"
+                class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+
+            <!-- KPI CARDS -->
+            <HBox justifyContent="SpaceAround" class="sapUiSmallMarginBottom">
+                
+
+                <VBox class="kpiCard" alignItems="Center">
+                    <Text text="Total Employees"/>
+                    <ObjectNumber number="{kpi>/totalEmployees}" state="Information"/>
+                </VBox>
+
+                <VBox class="kpiCard" alignItems="Center">
+                    <Text text="Active"/>
+                    <ObjectNumber number="{kpi>/activeEmployees}" state="Success"/>
+                </VBox>
+
+                <VBox class="kpiCard" alignItems="Center">
+                    <Text text="Avg Salary"/>
+                    <ObjectNumber number="{= '₹ ' + ${kpi>/avgSalary} }" state="Warning"/>
+                </VBox>
+
+            </HBox>
+
+            <!-- FILTER BAR -->
+            <HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
+
+                <SearchField 
+                    width="50%" 
+                    placeholder="Search Employee..." 
+                    liveChange=".onSearch"/>
+
+                <Select change="onFilterDepartment" width="200px">
+                    <items>
+                        <core:Item key="" text="All Departments"/>
+                        <core:Item key="IT" text="IT"/>
+                        <core:Item key="HR" text="HR"/>
+                        <core:Item key="Finance" text="Finance"/>
+                        <core:Item key="Sales" text="Sales"/>
+                    </items>
+                </Select>
+
+            </HBox>
+
+            <!--  ICON TABS  -->
+            <IconTabBar select="onTabSelect" class="sapUiSmallMarginBottom">
+
+                <items>
+                    <IconTabFilter text="All" key="all" icon="sap-icon://list" count="{kpi>/totalEmployees}"/>
+                    <IconTabFilter text="Active" key="Active" icon="sap-icon://accept" count="{kpi>/activeEmployees}"/>
+                    <IconTabFilter text="Inactive" key="Inactive" icon="sap-icon://decline"
+                        count="{= ${kpi>/totalEmployees} - ${kpi>/activeEmployees} }"/>
+                </items>
+
+            </IconTabBar>
+
+            <!-- TABLE CARD -->
+            <VBox class="tableCard">
+
+                <Table id="empTable" items="{/Employees}" growing="true">
+
+                    <columns>
+                        <Column><Text text="Employee"/></Column>
+                        <Column><Text text="Department"/></Column>
+                        <Column><Text text="Salary"/></Column>
+                        <Column><Text text="Status"/></Column>
+                        <Column><Text text="Action"/></Column>
+                    </columns>
+
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+
+                                <!-- Avatar + Name -->
+                                <HBox>
+                                    <Avatar 
+                                        displayShape="Circle"
+                                        initials="{= ${name}.substring(0,2).toUpperCase() }"/>
+                                    <Text text="{name}" class="sapUiSmallMarginBegin"/>
+                                </HBox>
+
+                                <Text text="{department}"/>
+
+                                <Text text="{= '₹ ' + ${salary} }"/>
+
+                                <ObjectStatus 
+                                    text="{status}"
+                                    state="{= ${status} === 'Active' ? 'Success' : 'Error'}"/>
+
+                                <HBox>
+                                    <Button icon="sap-icon://edit" press="onEdit"/>
+                                    <Button icon="sap-icon://delete" press="onDelete"/>
+                                </HBox>
+
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+
+                </Table>
+
+            </VBox>
+
+        </content>
+    </Page>
+</mvc:View>

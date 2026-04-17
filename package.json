@@ -2,16 +2,18 @@
   "name": "cap_master",
   "version": "1.0.0",
   "dependencies": {
-    "@cap-js/hana": "^2",
-    "@sap/cds": "^9",
-    "@sap/xssec": "^4"
+    "@cap-js/db-service": "^2.9.0",
+    "@cap-js/hana": "^2.7.0",
+    "@sap/cds": "^9.8.5",
+    "@sap/xssec": "^4",
+    "eslint": "^10.2.0"
   },
   "devDependencies": {
-    "@cap-js/sqlite": "^2",
+    "@cap-js/sqlite": "^2.2.0",
     "@sap/cds-dk": "^9",
     "cds-plugin-ui5": "^0.13.0",
-    "rimraf": "^5.0.5",
-    "mbt": "^1.2.29"
+    "mbt": "^1.2.29",
+    "rimraf": "^5.0.5"
   },
   "scripts": {
     "start": "cds-serve",
@@ -20,7 +22,8 @@
     "undeploy": "cf undeploy cap_master --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
-    "watch-order": "cds watch --open order/index.html?sap-ui-xx-viewCache=false --livereload false"
+    "watch-order": "cds watch --open order/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-employee": "cds watch --open employee/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "private": true,
   "cds": {

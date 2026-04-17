@@ -1,0 +1,112 @@
+<mvc:View controllerName="book.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls">
+    <Page id="page" title="{i18n>title}">
+        <content>
+
+            <!--  Toolbar -->
+            <Toolbar>
+                <HBox alignItems="Center" class="sapUiTinyMarginBegin">
+                    <core:Icon src="sap-icon://library" size="1.5rem" class="sapUiTinyMarginEnd"/>
+                    <Title text="Book Library" level="H2"/>
+                </HBox>
+                
+                <ToolbarSpacer/>
+                <Button text="Add Book" icon="sap-icon://add" press="onOpenDialog" type="Emphasized"/>
+            </Toolbar>
+
+            <VBox class="sapUiSmallMarginTop">
+                <Text text="Total Books" />
+                <Text id="totalText" text="0"/>
+            </VBox>
+
+            <SearchField 
+                placeholder="Search by title or author..."
+                liveChange="onSearch"
+                width="100%"
+                class="sapUiSmallMarginTop"/>
+
+        <VBox class="sapUiSmallMarginTop">
+                
+
+            <Title text="⭐ Favorite Books" level="H3"/>
+
+            <List 
+                items="{
+                    path: '/Books',
+                    filters: [{ path: 'favorite', operator: 'EQ', value1: true }]
+                }"
+                noDataText="No favorites yet">
+
+                <items>
+                    <CustomListItem>
+                        <VBox class="cardItem">
+                            <FormattedText htmlText="{path: 'title', formatter: '.formatHighlight'}"/>
+                            <Text text="{author}" class="cardAuthor"/>
+                        </VBox>
+                    </CustomListItem>
+                </items>
+
+            </List>
+
+        </VBox>
+           
+            <!-- Book List -->
+            <List id="bookList" items="{/Books}" class="sapUiSmallMarginTop" growing="true">
+
+    <items>
+        <CustomListItem>
+            <VBox class="cardItem">
+
+                <!-- Title -->
+                <Text text="{title}" class="cardTitle"/>
+
+                <!-- Author -->
+                <Text text="{author}" class="cardAuthor"/>
+
+                <!-- Actions -->
+                <HBox justifyContent="SpaceBetween" alignItems="Center">
+
+                    <!-- Favorite -->
+                    <Button icon="sap-icon://favorite" type="Transparent" press="onToggleFavorite"/>
+
+                    <HBox>
+                        <Button icon="sap-icon://edit" type="Transparent" press="onEdit"/>
+                        <Button icon="sap-icon://delete" type="Transparent" press="onDelete"/>
+                    </HBox>
+
+                </HBox>
+
+            </VBox>
+        </CustomListItem>
+    </items>
+
+</List>
+
+            <!-- Dialog -->
+            <Dialog id="addDialog" title="Add Book">
+                <VBox class="sapUiMediumMargin">
+
+                    <Label text="Book Title"/>
+                    <Input id="titleInput" required="true" placeholder="Enter book name"/>
+
+                    <Label text="Author"/>
+                    <Input id="authorInput" required="true" placeholder="Enter author name"/>
+
+</VBox>
+
+                <beginButton>
+                    <Button text="Save" press="onCreateBook" type="Emphasized"/>
+                </beginButton>
+
+                <endButton>
+                    <Button text="Cancel" press="onCloseDialog"/>
+                </endButton>
+            </Dialog>
+
+        </content>
+    </Page>
+</mvc:View>

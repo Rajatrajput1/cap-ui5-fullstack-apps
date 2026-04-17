@@ -1,0 +1,130 @@
+<mvc:View controllerName="order.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls">
+    <Page id="page" title="📊 Orders Dashboard">
+        <content>
+
+            <!-- Toolbar -->
+            <Toolbar>
+                <Title text="Orders Dashboard" level="H2"/>
+                <Button text="Add Order" type="Emphasized" press="onOpenDialog"/>
+                <ToolbarSpacer/>
+            </Toolbar>
+            <HBox justifyContent="SpaceAround" class="sapUiMediumMarginTop">
+
+            <HBox class="sapUiSmallMarginTop" justifyContent="End">
+
+    <Select 
+    id="statusFilter" 
+    change="onFilterStatus" 
+    width="250px"
+    class="sapUiTinyMarginEnd">
+        <items>
+            <core:Item key="" text="Filter by Status:" class="sapUiTinyMarginEnd"/>
+            <core:Item key="Delivered" text="Delivered"/>
+            <core:Item key="Pending" text="Pending"/>
+            <core:Item key="Cancelled" text="Cancelled"/>
+        </items>
+    </Select>
+
+</HBox>
+<HBox justifyContent="SpaceAround" class="sapUiMediumMarginTop">
+
+            <VBox class="kpiBox highlight">
+                <Text text="📦 Total Orders"/>
+                <Text id="totalOrders" class="kpiValue"/>
+            </VBox>
+
+            <VBox class="kpiBox revenue">
+                <Text text="💰 Revenue"/>
+                <Text id="totalRevenue" class="kpiValue"/>
+            </VBox>
+
+            <VBox class="kpiBox success">
+                <Text text="✅ Delivered"/>
+                <Text id="deliveredOrders" class="kpiValue"/>
+            </VBox>
+
+        </HBox>
+</HBox>
+<VBox class="sapUiMediumMarginTop">
+
+    <viz:VizFrame 
+        id="idVizFrame"
+        width="100%"
+        height="300px"
+        vizType="column"
+        xmlns:viz="sap.viz.ui5.controls">
+
+    </viz:VizFrame>
+
+</VBox>
+
+            <!-- Orders Table -->
+            <Table 
+    id="ordersTable" 
+    items="{ path: '/Orders' }"
+    class="sapUiSmallMarginTop"
+    growing="true"
+    growingScrollToLoad="true">
+
+                <columns>
+                    <Column><Text text="Customer"/></Column>
+                    <Column><Text text="Amount"/></Column>
+                    <Column><Text text="Status"/></Column>
+                    <Column><Text text="Delete"/></Column>
+                </columns>
+
+                <items>
+                    <ColumnListItem>
+                        <cells>
+
+                            <Text text="{customer}"/>
+                            <Text text="{= '₹ ' + ${amount} }"/>
+
+                            <!-- Status Color -->
+                            <ObjectStatus 
+                                text="{status}"
+                                state="{= ${status} === 'Delivered' ? 'Success' : ${status} === 'Pending' ? 'Warning' : 'Error' }"/>
+                            <Button icon="sap-icon://delete" type="Transparent" press="onDelete"/>         
+                        </cells>
+                    </ColumnListItem>
+                </items>
+
+            </Table>
+
+        </content>
+        <Dialog id="addDialog" title="Add Order">
+
+    <VBox class="sapUiSmallMargin">
+
+        <Label text="Customer"/>
+        <Input id="customerInput"/>
+
+        <Label text="Amount"/>
+        <Input id="amountInput" type="Number"/>
+
+        <Label text="Status"/>
+        <Select id="statusInput">
+            <items>
+                <core:Item key="Delivered" text="Delivered"/>
+                <core:Item key="Pending" text="Pending"/>
+                <core:Item key="Cancelled" text="Cancelled"/>
+            </items>
+        </Select>
+
+    </VBox>
+
+    <beginButton>
+        <Button text="Save" type="Emphasized" press="onCreateOrder"/>
+    </beginButton>
+
+    <endButton>
+        <Button text="Cancel" press="onCloseDialog"/>
+    </endButton>
+
+</Dialog>
+    </Page>
+</mvc:View>
