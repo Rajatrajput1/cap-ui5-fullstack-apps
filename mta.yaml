@@ -60,6 +60,10 @@ modules:
       - product.zip
       name: product
       target-path: app/
+    - artifacts:
+      - feedback.zip
+      name: feedback
+      target-path: app/
 - name: cap_masterstudent
   type: html5
   path: app/student
@@ -156,6 +160,16 @@ modules:
 - name: product
   type: html5
   path: app/product
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: feedback
+  type: html5
+  path: app/feedback
   build-parameters:
     build-result: dist
     builder: custom

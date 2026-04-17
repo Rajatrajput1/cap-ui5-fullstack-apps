@@ -1,0 +1,188 @@
+<mvc:View controllerName="feedback.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds">
+
+<Page title="Customer Feedback Analyzer">
+
+    <content>
+
+        <!-- Header -->
+        <Toolbar>
+            <Title text="Customer Feedback Analyzer" level="H2"/>
+            <ToolbarSpacer/>
+            <Button text="Add Feedback" press="onOpenDialog" type="Emphasized"/>
+        </Toolbar>
+
+        <MessageStrip 
+            text="Analyze customer sentiment and feedback trends"
+            type="Success"
+            showIcon="true"
+            class="sapUiSmallMarginBottom"/>
+
+        <!-- KPI -->
+        <HBox justifyContent="SpaceAround" class="sapUiSmallMarginBottom">
+
+            <VBox class="kpiCard" alignItems="Center">
+                <Text text="Total Feedback"/>
+                <ObjectNumber number="{kpi>/total}"/>
+            </VBox>
+
+            <VBox class="kpiCard" alignItems="Center">
+                <Text text="Average Rating"/>
+                <ObjectNumber number="{kpi>/avgRating}" state="Success"/>
+            </VBox>
+
+            <VBox class="kpiCard" alignItems="Center">
+                <Text text="Negative Feedback"/>
+                <ObjectNumber number="{kpi>/negative}" state="Error"/>
+            </VBox>
+
+        </HBox>
+        <VBox class="sapUiSmallMarginBottom">
+
+    <Text text="Feedback by Category" class="sapUiSmallMarginBottom"/>
+
+    <viz:VizFrame 
+        id="categoryChart"
+        vizType="donut"
+        width="100%"
+        height="300px">
+
+        <viz:dataset>
+            <viz.data:FlattenedDataset data="{categoryChart>/data}">
+                <viz.data:dimensions>
+                    <viz.data:DimensionDefinition name="Category" value="{category}"/>
+                </viz.data:dimensions>
+                <viz.data:measures>
+                    <viz.data:MeasureDefinition name="Count" value="{count}"/>
+                </viz.data:measures>
+            </viz.data:FlattenedDataset>
+        </viz:dataset>
+
+        <viz:feeds>
+            <viz.feeds:FeedItem uid="size" type="Measure" values="Count"/>
+            <viz.feeds:FeedItem uid="color" type="Dimension" values="Category"/>
+        </viz:feeds>
+
+    </viz:VizFrame>
+
+</VBox>
+
+        <VBox class="sapUiSmallMarginBottom">
+
+    <Text text="Rating Distribution" class="sapUiSmallMarginBottom"/>
+
+    <viz:VizFrame 
+        id="ratingChart"
+        vizType="column"
+        width="100%"
+        height="300px">
+
+        <viz:dataset>
+            <viz.data:FlattenedDataset data="{chart>/data}">
+                <viz.data:dimensions>
+                    <viz.data:DimensionDefinition name="Rating" value="{rating}"/>
+                </viz.data:dimensions>
+                <viz.data:measures>
+                    <viz.data:MeasureDefinition name="Count" value="{count}"/>
+                </viz.data:measures>
+            </viz.data:FlattenedDataset>
+        </viz:dataset>
+
+        <viz:feeds>
+            <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Count"/>
+            <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Rating"/>
+        </viz:feeds>
+
+    </viz:VizFrame>
+
+</VBox>
+
+        <!-- Search -->
+        <SearchField 
+            liveChange=".onSearch" 
+            width="100%" 
+            placeholder="Search feedback..." 
+            class="sapUiSmallMarginBottom"/>
+
+        <!-- Table -->
+        <Table id="feedbackTable" items="{/Feedback}" growing="true">
+
+            <columns>
+                <Column><Text text="Customer"/></Column>
+                <Column><Text text="Comment"/></Column>
+                <Column><Text text="Rating"/></Column>
+                <Column><Text text="Category"/></Column>
+                <Column><Text text="Sentiment"/></Column>
+            </columns>
+
+            <items>
+                <ColumnListItem>
+                    <cells>
+
+                        <Text text="{customer}"/>
+                        <Text text="{comment}"/>
+                        <Text text="{rating}"/>
+                        <Text text="{category}"/>
+
+                        <!-- SENTIMENT -->
+                        <ObjectStatus 
+                            text="{= ${rating} &lt;= 2 ? 'Negative' : ${rating} === 3 ? 'Neutral' : 'Positive'}"
+                            state="{= ${rating} &lt;= 2 ? 'Error' : ${rating} === 3 ? 'Warning' : 'Success'}"/>
+
+                    </cells>
+                </ColumnListItem>
+            </items>
+
+        </Table>
+
+        <Dialog id="feedbackDialog" title="Add Feedback">
+
+    <VBox class="sapUiSmallMargin">
+
+        <Label text="Customer"/>
+        <Input id="customerInput"/>
+
+        <Label text="Comment"/>
+        <Input id="commentInput"/>
+
+        <Label text="Rating"/>
+        <Select id="ratingInput" selectedKey="3">
+            <items>
+                <core:Item key="1" text="1"/>
+                <core:Item key="2" text="2"/>
+                <core:Item key="3" text="3"/>
+                <core:Item key="4" text="4"/>
+                <core:Item key="5" text="5"/>
+            </items>
+        </Select>
+
+        <Label text="Category"/>
+        <Select id="categoryInput" selectedKey="Product">
+            <items>
+                <core:Item key="Product" text="Product"/>
+                <core:Item key="Service" text="Service"/>
+                <core:Item key="Delivery" text="Delivery"/>
+            </items>
+        </Select>
+
+    </VBox>
+
+    <beginButton>
+        <Button text="Save" press="onSaveFeedback"/>
+    </beginButton>
+
+    <endButton>
+        <Button text="Cancel" press="onCloseDialog"/>
+    </endButton>
+
+</Dialog>
+
+    </content>
+
+</Page>
+</mvc:View>

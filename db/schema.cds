@@ -36,3 +36,12 @@ entity Products {
     price        : Decimal(10,2);
     stock        : Integer;
 }
+
+entity Feedback {
+    key ID      : UUID;
+    customer    : String;
+    comment     : String;
+    rating      : Integer; 
+    category    : String;  
+    date        : Date;
+}
