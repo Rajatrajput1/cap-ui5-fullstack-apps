@@ -1,0 +1,174 @@
+<mvc:View controllerName="product.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds">
+
+<Page title="Product Inventory Dashboard">
+
+    <content>
+
+        <!-- Header -->
+        <Toolbar>
+            <Title text="Product Inventory Dashboard" level="H2"/>
+            <ToolbarSpacer/>
+            <Button text="Add Product" press="onOpenDialog" type="Emphasized"/>
+        </Toolbar>
+
+        <!-- Message Strip -->
+        <MessageStrip 
+            text="Real-time inventory insights with analytics"
+            type="Success"
+            showIcon="true"
+            class="sapUiSmallMarginBottom"/>
+
+        <!-- KPI -->
+        <HBox justifyContent="SpaceAround" class="sapUiSmallMarginBottom">
+
+            <VBox class="kpiCard" alignItems="Center">
+                <Text text="Total Products"/>
+                <ObjectNumber number="{kpi>/totalProducts}"/>
+            </VBox>
+
+            <VBox class="kpiCard" alignItems="Center">
+                <Text text="Low Stock"/>
+                <ObjectNumber number="{kpi>/lowStock}" state="Error"/>
+            </VBox>
+
+            <VBox class="kpiCard" alignItems="Center">
+                <Text text="Inventory Value"/>
+                <ObjectNumber number="{= '₹ ' + ${kpi>/totalValue} }"/>
+            </VBox>
+
+        </HBox>
+
+        <!--  CHART -->
+        <VBox class="tableCard sapUiSmallMarginBottom">
+
+            <Text text="Products by Category" class="sapUiSmallMarginBottom"/>
+
+            <viz:VizFrame 
+                id="categoryChart"
+                vizType="column"
+                width="100%"
+                height="300px">
+
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{chart>/data}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Category" value="{category}"/>
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Count" value="{count}"/>
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+
+                <viz:feeds>
+                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Count"/>
+                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Category"/>
+                </viz:feeds>
+
+            </viz:VizFrame>
+
+        </VBox>
+
+        <!-- Search + Filter -->
+        <HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
+
+            <SearchField liveChange=".onSearch" width="50%"/>
+
+            <Select change="onFilterCategory" width="200px">
+                <items>
+                    <core:Item key="" text="All"/>
+                    <core:Item key="Electronics" text="Electronics"/>
+                    <core:Item key="Furniture" text="Furniture"/>
+                    <core:Item key="Stationery" text="Stationery"/>
+                </items>
+            </Select>
+
+        </HBox>
+
+        <!-- Tabs -->
+        <IconTabBar select="onTabSelect">
+            <items>
+                <IconTabFilter text="All" key="all" icon="sap-icon://list"/>
+                <IconTabFilter text="Low Stock" key="low" icon="sap-icon://alert"/>
+            </items>
+        </IconTabBar>
+
+        <!-- Table -->
+        <Table id="prodTable" items="{/Products}" growing="true">
+
+            <columns>
+                <Column><Text text="Product"/></Column>
+                <Column><Text text="Category"/></Column>
+                <Column><Text text="Price"/></Column>
+                <Column><Text text="Stock"/></Column>
+                <Column><Text text="Status"/></Column>
+                <Column><Text text="Action"/></Column> 
+            </columns>
+
+            <items>
+                <ColumnListItem>
+                    <cells>
+
+                        <Text text="{name}"/>
+                        <Text text="{category}"/>
+
+                        <Text 
+                            text="{= '₹ ' + ${price} }"
+                            class="{= ${price} > 50000 ? 'highPrice' : '' }"/>
+
+                        <Text text="{stock}"/>
+
+                        <ObjectStatus 
+                            text="{= ${stock} &lt; 5 ? 'Low Stock' : ${stock} &lt; 10 ? 'Medium' : 'In Stock'}"
+                            state="{= ${stock} &lt; 5 ? 'Error' : ${stock} &lt; 10 ? 'Warning' : 'Success'}"/>
+
+                        <HBox>
+                            <Button icon="sap-icon://edit" press="onEdit"/>
+                            <Button icon="sap-icon://delete" press="onDelete"/>
+                        </HBox>
+
+                    </cells>
+                </ColumnListItem>
+            </items>
+
+        </Table>
+
+        <!-- Dialog -->
+        <Dialog id="productDialog" title="Add Product">
+
+            <VBox class="sapUiSmallMargin">
+
+                <Label text="Name"/>
+                <Input id="nameInput"/>
+
+                <Label text="Category"/>
+                <Input id="categoryInput"/>
+
+                <Label text="Price"/>
+                <Input id="priceInput" type="Number"/>
+
+                <Label text="Stock"/>
+                <Input id="stockInput" type="Number"/>
+
+            </VBox>
+
+            <beginButton>
+                <Button text="Save" press="onSaveProduct"/>
+            </beginButton>
+
+            <endButton>
+                <Button text="Cancel" press="onCloseDialog"/>
+            </endButton>
+
+        </Dialog>
+
+    </content>
+
+</Page>
+</mvc:View>

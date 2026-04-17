@@ -23,7 +23,8 @@
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
     "watch-order": "cds watch --open order/index.html?sap-ui-xx-viewCache=false --livereload false",
-    "watch-employee": "cds watch --open employee/index.html?sap-ui-xx-viewCache=false --livereload false"
+    "watch-employee": "cds watch --open employee/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-product": "cds watch --open product/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "private": true,
   "cds": {

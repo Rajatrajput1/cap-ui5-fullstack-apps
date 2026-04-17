@@ -1,0 +1,32 @@
+name,category,price,stock
+Laptop,Electronics,80000,10
+Mouse,Electronics,500,50
+Keyboard,Electronics,1500,30
+Monitor,Electronics,12000,8
+Phone,Electronics,60000,15
+Tablet,Electronics,30000,3
+Headphones,Electronics,2000,4
+
+Chair,Furniture,3000,5
+Table,Furniture,7000,2
+Sofa,Furniture,25000,1
+Wardrobe,Furniture,15000,6
+Bed,Furniture,20000,3
+
+Notebook,Stationery,50,100
+Pen,Stationery,10,200
+Marker,Stationery,40,25
+Stapler,Stationery,150,7
+File Folder,Stationery,30,2
+
+Refrigerator,Appliances,45000,4
+Microwave,Appliances,12000,6
+Washing Machine,Appliances,35000,2
+Air Conditioner,Appliances,50000,3
+Fan,Appliances,2500,20
+
+Shoes,Fashion,3000,12
+T-Shirt,Fashion,800,40
+Jeans,Fashion,2000,18
+Jacket,Fashion,4000,2
+Watch,Fashion,5000,5

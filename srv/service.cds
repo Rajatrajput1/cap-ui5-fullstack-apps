@@ -5,5 +5,6 @@ service CatalogService {
   entity Books as projection on db.Books;
   entity Orders as projection on db.Orders;
   entity Employees as projection on db.Employees;
+  entity Products as projection on db.Products;
  
 }
